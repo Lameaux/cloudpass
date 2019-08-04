@@ -19,10 +19,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import SettingsIcon from '@material-ui/icons/Settings';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import CommentIcon from '@material-ui/icons/Comment';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import FolderIcon from '@material-ui/icons/Folder';
+import FolderSharedIcon from '@material-ui/icons/FolderShared';
 
 const drawerWidth = 240;
 
@@ -256,25 +258,41 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
         </div>
         <Divider />
         <List>
-          {['Passwords', 'Notes', 'Folders', 'Shared Items'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button selected={true}>
+            <ListItemIcon title="Passwords"><VerifiedUserIcon /></ListItemIcon>
+            <ListItemText primary="Passwords" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon title="Secret Notes"><CommentIcon /></ListItemIcon>
+            <ListItemText primary="Secret Notes" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon title="Folders"><FolderIcon /></ListItemIcon>
+            <ListItemText primary="Folders" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon title="Shared Items"><FolderSharedIcon /></ListItemIcon>
+            <ListItemText primary="Shared Items" />
+          </ListItem>
         </List>
         <Divider />
         <List>
           <ListItem button>
-            <ListItemIcon><SettingsIcon /></ListItemIcon>
+            <ListItemIcon title="Account Settings"><SettingsIcon /></ListItemIcon>
             <ListItemText primary="Account Settings" />
           </ListItem>
         </List>
       </Drawer>
-      <main className={classes.content}>
+      <div className={classes.content}>
         <div className={classes.toolbar} />
-        {children}
-      </main>
+        <main>
+          {children}
+        </main>
+        <footer>
+          <p>&copy; 2019 Lameaux</p>
+          <p>CloudPass was built with Next.js, Typescript, Material-UI and MongoDB.</p>
+        </footer>
+      </div>
     </div>
   );
 }

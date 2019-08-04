@@ -1,16 +1,24 @@
+import React from 'react';
 import { NextPage } from 'next';
-import FixedAddButton from '../components/FixedAddButton';
+import FloatingAddButton from '../components/FloatingAddButton';
+import { Typography } from '@material-ui/core';
+import PasswordTable from '../components/PasswordTable';
 
-const Home: NextPage<{ userAgent: string }> = ({ userAgent }) => (
+const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    console.log('Clicked');
+};
+
+const Home: NextPage<{ userAgent: string }> = () => (
     <div>
-        <p>HelloWorld! - user agent: {userAgent}</p>
-        <FixedAddButton />
+        <Typography variant="h4" component="h1" gutterBottom>
+            Passwords
+        </Typography>
+        
+        <PasswordTable />
+
+        <FloatingAddButton title="Add Password" onClick={handleAddButtonClick} />
     </div>
 )
-
-Home.getInitialProps = async ({ req }) => {
-    const userAgent = req ? req.headers['user-agent'] || '' : navigator.userAgent;
-    return { userAgent };
-};
 
 export default Home;
