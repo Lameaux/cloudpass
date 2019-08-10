@@ -24,6 +24,7 @@
     "@material-ui/icons": "^4.2.1",
     "@material-ui/lab": "^4.0.0-alpha.22",
     "clsx": "^1.0.4",
+    "heroku-ssl-redirect": "0.0.4",
     "isomorphic-unfetch": "^3.0.0",
     "next": "^9.0.3",
     "react": "^16.8.6",
