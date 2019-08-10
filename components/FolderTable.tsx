@@ -15,7 +15,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Data from '../types/PasswordRowData'
+import Data from '../types/FolderRowData'
 
 function desc<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -54,10 +54,7 @@ interface HeadRow {
 }
 
 const headRows: HeadRow[] = [
-    { id: 'resourceName', numeric: false, disablePadding: true, label: 'Resource' },
-    { id: 'resourceLocation', numeric: false, disablePadding: false, label: 'Location' },
-    { id: 'userName', numeric: false, disablePadding: false, label: 'User Name' },
-    { id: 'password', numeric: false, disablePadding: false, label: 'Password' },
+    { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
     { id: 'id', numeric: false, disablePadding: false, label: 'Actions' },
 ];
 
@@ -85,7 +82,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={numSelected === rowCount}
                         onChange={onSelectAllClick}
-                        inputProps={{ 'aria-label': 'select all passwords' }}
+                        inputProps={{ 'aria-label': 'select all folders' }}
                     />
                 </TableCell>
                 {headRows.map(row => (
@@ -143,14 +140,12 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
 );
 
 interface EnhancedTableToolbarProps {
-    title: string;
-    rowCount: number;
     numSelected: number;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     const classes = useToolbarStyles();
-    const { numSelected, title, rowCount } = props;
+    const { numSelected } = props;
 
     return (
         <Toolbar
@@ -165,7 +160,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           </Typography>
                 ) : (
                         <Typography variant="subtitle1" id="tableTitle">
-                            Folder: <b>{title}</b> ({rowCount})
+                            Folders
                         </Typography>
                     )}
             </div>
@@ -213,10 +208,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function PasswordTable({ title, rows }: { title: string, rows: Data[] }) {
+export default function FolderTable({ rows }: { rows: Data[] }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('resourceName');
+    const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
     const [selected, setSelected] = React.useState<string[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -272,7 +267,7 @@ export default function PasswordTable({ title, rows }: { title: string, rows: Da
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar title={title} rowCount={rows.length} numSelected={selected.length} />
+                <EnhancedTableToolbar numSelected={selected.length} />
                 <div className={classes.tableWrapper}>
                     <Table
                         className={classes.table}
@@ -312,11 +307,8 @@ export default function PasswordTable({ title, rows }: { title: string, rows: Da
                                                 />
                                             </TableCell>
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.resourceName}
+                                                {row.name}
                                             </TableCell>
-                                            <TableCell>{row.resourceLocation}</TableCell>
-                                            <TableCell>{row.userName}</TableCell>
-                                            <TableCell>{row.password}</TableCell>
                                             <TableCell>{row.id}</TableCell>
                                         </TableRow>
                                     );

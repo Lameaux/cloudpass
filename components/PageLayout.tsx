@@ -13,17 +13,17 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import SettingsIcon from '@material-ui/icons/Settings';
-import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
-import CommentIcon from '@material-ui/icons/Comment';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import FolderIcon from '@material-ui/icons/Folder';
+import SettingsIcon from '@material-ui/icons/SettingsOutlined';
+import NoteIcon from '@material-ui/icons/ListAltOutlined';
+import PasswordIcon from '@material-ui/icons/LockOutlined';
+import FolderIcon from '@material-ui/icons/FolderSpecialOutlined';
+import PowerIcon from '@material-ui/icons/PowerSettingsNewOutlined';
 import Link from './Link';
 import { useRouter } from 'next/router';
 import Chip from '@material-ui/core/Chip';
@@ -55,6 +55,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     menuButton: {
       marginRight: 36,
+    },
+    menuIcon: {
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(1),
+      }
     },
     title: {
       display: 'none',
@@ -137,6 +142,9 @@ const useStyles = makeStyles((theme: Theme) =>
     chip: {
       margin: theme.spacing(1),
     },
+    footer: {
+      marginTop: theme.spacing(4),
+    }
   }),
 );
 
@@ -180,7 +188,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
     >
       <MenuItem onClick={handleMenuClose}>
         <IconButton aria-label="Logout" color="inherit">
-          <MeetingRoomIcon />
+          <PowerIcon />
         </IconButton>
         <p>Logout</p>
       </MenuItem>
@@ -227,10 +235,12 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
           <div>
             <Chip
               icon={<AccountCircle />}
-              label="cloud.user@gmail.com"
-              onDelete={handleProfileMenuOpen}
+              label="Demo User"
+              onClick={handleProfileMenuOpen}
               className={classes.chip}
               color="primary"
+              clickable
+
             />
           </div>
         </Toolbar>
@@ -259,19 +269,19 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
         <List>
           <Link href="/" color="inherit">
             <ListItem button selected={router.route === '/'}>
-              <ListItemIcon title="Passwords"><VerifiedUserIcon /></ListItemIcon>
+              <ListItemIcon className={classes.menuIcon} title="Passwords"><PasswordIcon /></ListItemIcon>
               <ListItemText primary="Passwords" />
             </ListItem>
           </Link>
           <Link href="/notes" color="inherit">
             <ListItem button selected={router.route === '/notes'}>
-              <ListItemIcon title="Secret Notes"><CommentIcon /></ListItemIcon>
+              <ListItemIcon className={classes.menuIcon} title="Secret Notes"><NoteIcon /></ListItemIcon>
               <ListItemText primary="Secret Notes" />
             </ListItem>
           </Link>
           <Link href="/folders" color="inherit">
             <ListItem button selected={router.route === '/folders'}>
-              <ListItemIcon title="Folders"><FolderIcon /></ListItemIcon>
+              <ListItemIcon className={classes.menuIcon} title="Folders"><FolderIcon /></ListItemIcon>
               <ListItemText primary="Folders" />
             </ListItem>
           </Link>
@@ -280,7 +290,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
         <List>
           <Link href="/settings" color="inherit">
             <ListItem button selected={router.route === '/settings'}>
-              <ListItemIcon title="Settings"><SettingsIcon /></ListItemIcon>
+              <ListItemIcon className={classes.menuIcon} title="Settings"><SettingsIcon /></ListItemIcon>
               <ListItemText primary="Settings" />
             </ListItem>
           </Link>
@@ -291,7 +301,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
         <main>
           {children}
         </main>
-        <footer>
+        <footer className={classes.footer}>
           <p>&copy; 2019 Lameaux</p>
           <p>CloudPass was built with Next.js, Typescript, Material-UI and MongoDB.</p>
         </footer>

@@ -1,5 +1,5 @@
-export default interface PasswordData {
-    id: string,
+export default interface PasswordRowData {
+    id: string;
     resourceName: string;
     resourceLocation: string;
     userName: string;

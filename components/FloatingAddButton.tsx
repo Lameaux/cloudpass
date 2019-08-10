@@ -36,7 +36,7 @@ export default function FloatingAddButton({
             <Fab
                 onClick={onClick}
                 size="large"
-                color="primary"
+                color="secondary"
                 aria-label="add"
                 className={classes.fab}
             >
