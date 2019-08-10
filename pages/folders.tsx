@@ -1,5 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
+import fetch from 'isomorphic-unfetch';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import FolderIcon from '@material-ui/icons/FolderSpecialOutlined';
