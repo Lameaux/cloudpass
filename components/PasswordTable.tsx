@@ -15,32 +15,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-
-interface Data {
-    id: string,
-    resourceName: string;
-    resourceLocation: string;
-    userName: string;
-    password: string;
-}
-
-function createData(
-    id: string,
-    resourceName: string,
-    resourceLocation: string,
-    userName: string,
-    password: string
-): Data {
-    return { id, resourceName, resourceLocation, userName, password };
-}
-
-const rows = [
-    createData('0001', 'Facebook', 'https://facebook.com', 'user@gmail.com', '1234'),
-    createData('0002', 'LinkedIn', 'https://linkedin.com', 'user@gmail.com', '1234'),
-    createData('0003', 'Twitter', 'https://twitter.com', 'user@gmail.com', '1234'),
-    createData('0004', 'GMail', 'https://mail.google.com', 'user@gmail.com', '1234'),
-];
+import Data from '../types/PasswordData'
 
 function desc<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -194,19 +169,13 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             </div>
             <div className={classes.spacer} />
             <div className={classes.actions}>
-                {numSelected > 0 ? (
+                {numSelected > 0 && (
                     <Tooltip title="Delete">
                         <IconButton aria-label="delete">
                             <DeleteIcon />
                         </IconButton>
                     </Tooltip>
-                ) : (
-                        <Tooltip title="Filter list">
-                            <IconButton aria-label="filter list">
-                                <FilterListIcon />
-                            </IconButton>
-                        </Tooltip>
-                    )}
+                )}
             </div>
         </Toolbar>
     );
@@ -242,7 +211,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function PasswordTable() {
+export default function PasswordTable({ rows }: { rows: Data[] }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('resourceName');

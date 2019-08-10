@@ -24,7 +24,9 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import CommentIcon from '@material-ui/icons/Comment';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import FolderIcon from '@material-ui/icons/Folder';
-import FolderSharedIcon from '@material-ui/icons/FolderShared';
+import Link from './Link';
+import { useRouter } from 'next/router';
+import Chip from '@material-ui/core/Chip';
 
 const drawerWidth = 240;
 
@@ -132,14 +134,20 @@ const useStyles = makeStyles((theme: Theme) =>
         width: 200,
       },
     },
+    chip: {
+      margin: theme.spacing(1),
+    },
   }),
 );
 
 const PageLayout: FunctionComponent<{}> = ({ children }) => {
   const classes = useStyles();
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const router = useRouter();
 
   function handleDrawerOpen() {
     setOpen(true);
@@ -170,12 +178,6 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>
-        <IconButton aria-label="Account Settings" color="inherit">
-          <SettingsIcon />
-        </IconButton>
-        <p>Account Settings</p>
-      </MenuItem>
       <MenuItem onClick={handleMenuClose}>
         <IconButton aria-label="Logout" color="inherit">
           <MeetingRoomIcon />
@@ -223,16 +225,13 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
           </div>
           <div className={classes.grow} />
           <div>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            <Chip
+              icon={<AccountCircle />}
+              label="cloud.user@gmail.com"
+              onDelete={handleProfileMenuOpen}
+              className={classes.chip}
+              color="primary"
+            />
           </div>
         </Toolbar>
       </AppBar>
@@ -258,29 +257,33 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
         </div>
         <Divider />
         <List>
-          <ListItem button selected={true}>
-            <ListItemIcon title="Passwords"><VerifiedUserIcon /></ListItemIcon>
-            <ListItemText primary="Passwords" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon title="Secret Notes"><CommentIcon /></ListItemIcon>
-            <ListItemText primary="Secret Notes" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon title="Folders"><FolderIcon /></ListItemIcon>
-            <ListItemText primary="Folders" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon title="Shared Items"><FolderSharedIcon /></ListItemIcon>
-            <ListItemText primary="Shared Items" />
-          </ListItem>
+          <Link href="/" color="inherit">
+            <ListItem button selected={router.route === '/'}>
+              <ListItemIcon title="Passwords"><VerifiedUserIcon /></ListItemIcon>
+              <ListItemText primary="Passwords" />
+            </ListItem>
+          </Link>
+          <Link href="/notes" color="inherit">
+            <ListItem button selected={router.route === '/notes'}>
+              <ListItemIcon title="Secret Notes"><CommentIcon /></ListItemIcon>
+              <ListItemText primary="Secret Notes" />
+            </ListItem>
+          </Link>
+          <Link href="/folders" color="inherit">
+            <ListItem button selected={router.route === '/folders'}>
+              <ListItemIcon title="Folders"><FolderIcon /></ListItemIcon>
+              <ListItemText primary="Folders" />
+            </ListItem>
+          </Link>
         </List>
         <Divider />
         <List>
-          <ListItem button>
-            <ListItemIcon title="Account Settings"><SettingsIcon /></ListItemIcon>
-            <ListItemText primary="Account Settings" />
-          </ListItem>
+          <Link href="/settings" color="inherit">
+            <ListItem button selected={router.route === '/settings'}>
+              <ListItemIcon title="Settings"><SettingsIcon /></ListItemIcon>
+              <ListItemText primary="Settings" />
+            </ListItem>
+          </Link>
         </List>
       </Drawer>
       <div className={classes.content}>
@@ -293,7 +296,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
           <p>CloudPass was built with Next.js, Typescript, Material-UI and MongoDB.</p>
         </footer>
       </div>
-    </div>
+    </div >
   );
 }
 
