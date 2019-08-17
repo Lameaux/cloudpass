@@ -29,7 +29,7 @@ const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 };
 
 const Notes: NextPage<{ notesFolders: SecretNoteFolderRowData[] }> = ({ notesFolders }) => {
-    const classes = useStyles();
+    const classes = useStyles({});
 
     return (
         <div>

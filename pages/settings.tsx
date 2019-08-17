@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Settings: NextPage<{}> = () => {
-    const classes = useStyles();
+    const classes = useStyles({});
 
     return (
         <div>

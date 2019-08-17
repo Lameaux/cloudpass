@@ -14,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
+import ExpandMore from '@material-ui/icons/ExpandMoreOutlined';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
@@ -149,7 +150,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const PageLayout: FunctionComponent<{}> = ({ children }) => {
-  const classes = useStyles();
+  const classes = useStyles({});
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -237,11 +238,13 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
               icon={<AccountCircle />}
               label="Demo User"
               onClick={handleProfileMenuOpen}
+              onDelete={handleProfileMenuOpen}
               className={classes.chip}
               color="primary"
               clickable
-
+              deleteIcon={<ExpandMore />}
             />
+
           </div>
         </Toolbar>
       </AppBar>

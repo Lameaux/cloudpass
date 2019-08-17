@@ -29,7 +29,7 @@ const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 };
 
 const Passwords: NextPage<{ passwordFolders: PasswordFolderRowData[] }> = ({ passwordFolders }) => {
-    const classes = useStyles();
+    const classes = useStyles({});
 
     return (
         <div>

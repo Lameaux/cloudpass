@@ -30,7 +30,7 @@ const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 };
 
 const Folders: NextPage<{ folders: FolderRowData[] }> = ({ folders }) => {
-    const classes = useStyles();
+    const classes = useStyles({});
 
     return (
         <div>

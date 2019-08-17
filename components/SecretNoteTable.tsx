@@ -42,7 +42,7 @@ type Order = 'asc' | 'desc';
 function getSorting<K extends keyof any>(
     order: Order,
     orderBy: K,
-): (a: { [key in K]: number | string }, b: { [key in K]: number | string }) => number {
+): (a: { [key in K]: string }, b: { [key in K]: string }) => number {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
@@ -146,7 +146,7 @@ interface EnhancedTableToolbarProps {
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const classes = useToolbarStyles();
+    const classes = useToolbarStyles(props);
     const { numSelected, title, rowCount } = props;
 
     return (
@@ -211,7 +211,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function PasswordTable({ title, rows }: { title: string, rows: Data[] }) {
-    const classes = useStyles();
+    const classes = useStyles({});
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
     const [selected, setSelected] = React.useState<string[]>([]);

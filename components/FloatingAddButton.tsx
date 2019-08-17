@@ -24,7 +24,7 @@ export default function FloatingAddButton({
     title: string,
     onClick: React.MouseEventHandler
 }) {
-    const classes = useStyles();
+    const classes = useStyles({});
 
     return (
         <Tooltip
