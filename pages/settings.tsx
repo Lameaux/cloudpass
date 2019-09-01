@@ -29,7 +29,10 @@ const Settings: NextPage<{}> = () => {
                 </Typography>
             </div>
 
-            Change password...
+            <Typography variant="h6" component="p">
+                API Access
+            </Typography>
+
         </div>
     );
 }

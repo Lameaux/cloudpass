@@ -4,7 +4,7 @@ import { NextPage } from 'next';
 import fetch from 'isomorphic-unfetch';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-import PasswordIcon from '@material-ui/icons/LockOutlined';
+import NoteIcon from '@material-ui/icons/ListAltOutlined';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -19,7 +19,7 @@ import { SERVER } from '../config';
 import { loadUserData } from '../domain/store';
 
 import FolderRowData from '../types/FolderRowData';
-import PasswordRowData from '../types/PasswordRowData';
+import SecretNoteRowData from '../types/SecretNoteRowData';
 import MyNextPageContext from '../types/MyNextPageContext';
 
 import FolderTabs from '../components/FolderTabs';
@@ -47,18 +47,20 @@ const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
   console.log('Clicked');
 };
 
-const Passwords: NextPage<{
+interface PageProps {
   folders: FolderRowData[];
-  passwords: PasswordRowData[];
-}> = ({ folders, passwords }) => {
+  secretNotes: SecretNoteRowData[];
+}
+
+const SecretNotes: NextPage<PageProps> = ({ folders, secretNotes }) => {
   const classes = useStyles({});
 
   return (
     <div>
       <div className={classes.pageHeader}>
-        <PasswordIcon fontSize="large" />
+        <NoteIcon fontSize="large" />
         <Typography className={classes.title} variant="h5" component="p">
-          Passwords
+          Secret Notes
         </Typography>
       </div>
 
@@ -66,14 +68,14 @@ const Passwords: NextPage<{
 
       <Paper className={classes.list}>
         <List>
-          {passwords.map(password => (
-            <ListItem button key={password.id}>
+          {secretNotes.map(secretNote => (
+            <ListItem button key={secretNote.id}>
               <ListItemAvatar>
-                <Avatar>{password.resourceName.charAt(0)}</Avatar>
+                <Avatar>{secretNote.name.charAt(0)}</Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={password.resourceName}
-                secondary={password.resourceLocation}
+                primary={secretNote.name}
+                secondary="Updated 2019-02-02"
               />
               <ListItemSecondaryAction>
                 <IconButton edge="end" aria-label="delete">
@@ -85,19 +87,25 @@ const Passwords: NextPage<{
         </List>
       </Paper>
 
-      <FloatingAddButton title="Add Password" onClick={handleAddButtonClick} />
+      <FloatingAddButton
+        title="Add Secret Note"
+        onClick={handleAddButtonClick}
+      />
     </div>
   );
 };
 
-Passwords.getInitialProps = async function({ store }: MyNextPageContext) {
+SecretNotes.getInitialProps = async function({ store }: MyNextPageContext) {
   const res = await fetch(`${SERVER}/api/user_data`);
   const json = await res.json();
   store.dispatch(loadUserData(json));
 
-  return { folders: [], passwords: [] };
+  return { folders: [], secretNotes: [] };
 };
 
-const mapStateToProps = ({ folders, passwords }) => ({ folders, passwords });
+const mapStateToProps = ({ folders, secretNotes }) => ({
+  folders,
+  secretNotes
+});
 
-export default connect(mapStateToProps)(Passwords);
+export default connect(mapStateToProps)(SecretNotes);

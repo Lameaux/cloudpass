@@ -1,6 +1,13 @@
 import React, { FunctionComponent } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
-import { fade, createStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
+import {
+  fade,
+  createStyles,
+  makeStyles,
+  useTheme,
+  Theme
+} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,97 +35,110 @@ import PowerIcon from '@material-ui/icons/PowerSettingsNewOutlined';
 import Link from './Link';
 import { useRouter } from 'next/router';
 import Chip from '@material-ui/core/Chip';
+import { StoreState } from '../types/StoreState';
+import { logoutUser } from '../domain/store';
 
 const drawerWidth = 240;
+
+const userSelector = (state: StoreState) => state.email;
+
+const useUser = () => {
+  const dispatch = useDispatch();
+  const logout = () => {
+    dispatch(logoutUser());
+  };
+
+  return { logout };
+};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex',
+      display: 'flex'
     },
     grow: {
-      flexGrow: 1,
+      flexGrow: 1
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
+        duration: theme.transitions.duration.leavingScreen
+      })
     },
     appBarShift: {
       marginLeft: drawerWidth,
       width: `calc(100% - ${drawerWidth}px)`,
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
+        duration: theme.transitions.duration.enteringScreen
+      })
     },
     menuButton: {
-      marginRight: 36,
+      marginRight: 36
     },
     menuIcon: {
       [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
+        marginLeft: theme.spacing(1)
       }
     },
     title: {
       display: 'none',
       [theme.breakpoints.up('sm')]: {
-        display: 'flex',
-      },
+        display: 'flex'
+      }
     },
     hide: {
-      display: 'none',
+      display: 'none'
     },
     drawer: {
       width: drawerWidth,
       flexShrink: 0,
-      whiteSpace: 'nowrap',
+      whiteSpace: 'nowrap'
     },
     drawerOpen: {
       width: drawerWidth,
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
+        duration: theme.transitions.duration.enteringScreen
+      })
     },
     drawerClose: {
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
+        duration: theme.transitions.duration.leavingScreen
       }),
       overflowX: 'hidden',
       width: theme.spacing(7) + 1,
       [theme.breakpoints.up('sm')]: {
-        width: theme.spacing(9) + 1,
-      },
+        width: theme.spacing(9) + 1
+      }
     },
     toolbar: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-end',
       padding: '0 8px',
-      ...theme.mixins.toolbar,
+      ...theme.mixins.toolbar
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3),
+      padding: theme.spacing(3)
     },
     search: {
       position: 'relative',
       borderRadius: theme.shape.borderRadius,
       backgroundColor: fade(theme.palette.common.white, 0.15),
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
+        backgroundColor: fade(theme.palette.common.white, 0.25)
       },
       marginRight: theme.spacing(2),
       marginLeft: 0,
       width: '100%',
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(3),
-        width: 'auto',
-      },
+        width: 'auto'
+      }
     },
     searchIcon: {
       width: theme.spacing(7),
@@ -127,30 +147,33 @@ const useStyles = makeStyles((theme: Theme) =>
       pointerEvents: 'none',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     inputRoot: {
-      color: 'inherit',
+      color: 'inherit'
     },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 7),
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('md')]: {
-        width: 200,
-      },
+        width: 200
+      }
     },
     chip: {
-      margin: theme.spacing(1),
+      margin: theme.spacing(1)
     },
     footer: {
-      marginTop: theme.spacing(4),
+      marginTop: theme.spacing(4)
     }
-  }),
+  })
 );
 
 const PageLayout: FunctionComponent<{}> = ({ children }) => {
   const classes = useStyles({});
+
+  const email = useSelector(userSelector);
+  const { logout } = useUser();
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -176,6 +199,11 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
     setAnchorEl(null);
   }
 
+  function handleLogout() {
+    handleMenuClose();
+    logout();
+  }
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -187,7 +215,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem onClick={handleLogout}>
         <IconButton aria-label="Logout" color="inherit">
           <PowerIcon />
         </IconButton>
@@ -201,7 +229,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: open
         })}
       >
         <Toolbar>
@@ -211,13 +239,13 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
             onClick={handleDrawerOpen}
             edge="start"
             className={clsx(classes.menuButton, {
-              [classes.hide]: open,
+              [classes.hide]: open
             })}
           >
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            CloudPass ***|
+            CloudPass ***
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -227,7 +255,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
-                input: classes.inputInput,
+                input: classes.inputInput
               }}
               inputProps={{ 'aria-label': 'search' }}
             />
@@ -236,7 +264,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
           <div>
             <Chip
               icon={<AccountCircle />}
-              label="Demo User"
+              label={email}
               onClick={handleProfileMenuOpen}
               onDelete={handleProfileMenuOpen}
               className={classes.chip}
@@ -244,7 +272,6 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
               clickable
               deleteIcon={<ExpandMore />}
             />
-
           </div>
         </Toolbar>
       </AppBar>
@@ -253,38 +280,50 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
         variant="permanent"
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
+          [classes.drawerClose]: !open
         })}
         classes={{
           paper: clsx({
             [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
+            [classes.drawerClose]: !open
+          })
         }}
         open={open}
+        onMouseLeave={handleDrawerClose}
+        onMouseEnter={handleDrawerOpen}
       >
         <div className={classes.toolbar}>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === 'rtl' ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
           </IconButton>
         </div>
         <Divider />
         <List>
           <Link href="/" color="inherit">
             <ListItem button selected={router.route === '/'}>
-              <ListItemIcon className={classes.menuIcon} title="Passwords"><PasswordIcon /></ListItemIcon>
+              <ListItemIcon className={classes.menuIcon} title="Passwords">
+                <PasswordIcon />
+              </ListItemIcon>
               <ListItemText primary="Passwords" />
             </ListItem>
           </Link>
-          <Link href="/notes" color="inherit">
-            <ListItem button selected={router.route === '/notes'}>
-              <ListItemIcon className={classes.menuIcon} title="Secret Notes"><NoteIcon /></ListItemIcon>
+          <Link href="/secret_notes" color="inherit">
+            <ListItem button selected={router.route === '/secret_notes'}>
+              <ListItemIcon className={classes.menuIcon} title="Secret Notes">
+                <NoteIcon />
+              </ListItemIcon>
               <ListItemText primary="Secret Notes" />
             </ListItem>
           </Link>
           <Link href="/folders" color="inherit">
             <ListItem button selected={router.route === '/folders'}>
-              <ListItemIcon className={classes.menuIcon} title="Folders"><FolderIcon /></ListItemIcon>
+              <ListItemIcon className={classes.menuIcon} title="Folders">
+                <FolderIcon />
+              </ListItemIcon>
               <ListItemText primary="Folders" />
             </ListItem>
           </Link>
@@ -293,7 +332,9 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
         <List>
           <Link href="/settings" color="inherit">
             <ListItem button selected={router.route === '/settings'}>
-              <ListItemIcon className={classes.menuIcon} title="Settings"><SettingsIcon /></ListItemIcon>
+              <ListItemIcon className={classes.menuIcon} title="Settings">
+                <SettingsIcon />
+              </ListItemIcon>
               <ListItemText primary="Settings" />
             </ListItem>
           </Link>
@@ -301,16 +342,17 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
       </Drawer>
       <div className={classes.content}>
         <div className={classes.toolbar} />
-        <main>
-          {children}
-        </main>
+        <main>{children}</main>
         <footer className={classes.footer}>
           <p>&copy; 2019 Lameaux</p>
-          <p>CloudPass was built with Next.js, Typescript, Material-UI and MongoDB.</p>
+          <p>
+            CloudPass was built with Next.js, Typescript, Material-UI and
+            MongoDB.
+          </p>
         </footer>
       </div>
-    </div >
+    </div>
   );
-}
+};
 
 export default PageLayout;

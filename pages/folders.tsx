@@ -1,15 +1,27 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { NextPage } from 'next';
 import fetch from 'isomorphic-unfetch';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-import FolderIcon from '@material-ui/icons/FolderSpecialOutlined';
+import FolderSpecialOutlined from '@material-ui/icons/FolderSpecialOutlined';
+import Paper from '@material-ui/core/Paper';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { SERVER } from "../config";
+import { loadUserData } from '../domain/store';
+
 import FolderRowData from '../types/FolderRowData';
+import MyNextPageContext from '../types/MyNextPageContext';
 
 import FloatingAddButton from '../components/FloatingAddButton';
-import FolderTable from '../components/FolderTable';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -20,7 +32,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         title: {
             marginLeft: theme.spacing(1),
-        }
+        },
+        list: {
+            flexGrow: 1,
+        },
     })
 );
 
@@ -35,24 +50,50 @@ const Folders: NextPage<{ folders: FolderRowData[] }> = ({ folders }) => {
     return (
         <div>
             <div className={classes.pageHeader}>
-                <FolderIcon fontSize="large" />
+                <FolderSpecialOutlined fontSize="large" />
                 <Typography className={classes.title} variant="h5" component="p">
-                    Manage Folders
+                    Folders
                 </Typography>
             </div>
 
-            <FolderTable rows={folders} />
+            <Paper className={classes.list}>
+                <List>
+                    {folders.map(
+                        folder => (
+                            <ListItem button key={folder.id}>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        {folder.name.charAt(0)}
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={folder.name}
+                                    secondary={folder.description}
+                                />
+                                <ListItemSecondaryAction>
+                                    <IconButton edge="end" aria-label="delete">
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        )
+                    )}
+                </List>
+            </Paper>
 
             <FloatingAddButton title="Add Folder" onClick={handleAddButtonClick} />
         </div>
     );
 }
 
-Folders.getInitialProps = async function () {
-    const res = await fetch(`${SERVER}/api/folders`);
-    const folders = await res.json();
+Folders.getInitialProps = async function ({ store }: MyNextPageContext) {
+    const res = await fetch(`${SERVER}/api/user_data`);
+    const json = await res.json();
+    store.dispatch(loadUserData(json));
 
-    return { folders };
+    return { folders: [] };
 }
 
-export default Folders;
+const mapStateToProps = ({ folders }) => ({ folders })
+
+export default connect(mapStateToProps)(Folders);
