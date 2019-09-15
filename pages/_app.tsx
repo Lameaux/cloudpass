@@ -1,18 +1,19 @@
-import React from 'react'
-import App, { Container, AppProps } from 'next/app'
+import React from 'react';
+import App, { Container, AppProps } from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../components/theme';
-import PageLayout from '../components/PageLayout'
+import PageLayout from '../components/PageLayout';
+import UserAuthentication from '../components/UserAuthentication';
 
-import withRedux from 'next-redux-wrapper'
+import withRedux from 'next-redux-wrapper';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { initializeStore } from '../domain/store';
 
 interface Props {
-  store: Store
+  store: Store;
 }
 
 class MyApp extends App<Props & AppProps> {
@@ -21,7 +22,7 @@ class MyApp extends App<Props & AppProps> {
       pageProps: Component.getInitialProps
         ? await Component.getInitialProps(ctx)
         : {}
-    }
+    };
   }
 
   componentDidMount() {
@@ -33,7 +34,7 @@ class MyApp extends App<Props & AppProps> {
   }
 
   render() {
-    const { Component, pageProps, store } = this.props
+    const { Component, pageProps, store } = this.props;
     return (
       <Provider store={store}>
         <Container>
@@ -42,13 +43,15 @@ class MyApp extends App<Props & AppProps> {
           </Head>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <PageLayout>
-              <Component {...pageProps} />
-            </PageLayout>
+            <UserAuthentication>
+              <PageLayout>
+                <Component {...pageProps} />
+              </PageLayout>
+            </UserAuthentication>
           </ThemeProvider>
         </Container>
       </Provider>
-    )
+    );
   }
 }
 

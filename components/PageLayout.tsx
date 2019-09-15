@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme: Theme) =>
         duration: theme.transitions.duration.leavingScreen
       }),
       overflowX: 'hidden',
-      width: theme.spacing(7) + 1,
+      width: 0,
       [theme.breakpoints.up('sm')]: {
         width: theme.spacing(9) + 1
       }
@@ -123,7 +123,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3)
+      padding: theme.spacing(3, 0),
+      [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(3, 1)
+      },
+      [theme.breakpoints.up('md')]: {
+        padding: theme.spacing(3, 3)
+      }
     },
     search: {
       position: 'relative',
@@ -163,8 +169,15 @@ const useStyles = makeStyles((theme: Theme) =>
     chip: {
       margin: theme.spacing(1)
     },
+    chipLabel: {
+      display: 'none',
+      [theme.breakpoints.up('sm')]: {
+        display: 'inline'
+      }
+    },
     footer: {
-      marginTop: theme.spacing(4)
+      marginTop: theme.spacing(4),
+      textAlign: 'center'
     }
   })
 );
@@ -219,7 +232,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
         <IconButton aria-label="Logout" color="inherit">
           <PowerIcon />
         </IconButton>
-        <p>Logout</p>
+        <p>Logout {email}</p>
       </MenuItem>
     </Menu>
   );
@@ -264,7 +277,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
           <div>
             <Chip
               icon={<AccountCircle />}
-              label={email}
+              label={<span className={classes.chipLabel}>{email}</span>}
               onClick={handleProfileMenuOpen}
               onDelete={handleProfileMenuOpen}
               className={classes.chip}
@@ -345,10 +358,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
         <main>{children}</main>
         <footer className={classes.footer}>
           <p>&copy; 2019 Lameaux</p>
-          <p>
-            CloudPass was built with Next.js, Typescript, Material-UI and
-            MongoDB.
-          </p>
+          <p>Built with Next.js, Typescript, Material-UI and MongoDB.</p>
         </footer>
       </div>
     </div>

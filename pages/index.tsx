@@ -13,7 +13,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import { SERVER } from '../config';
 import { loadUserData } from '../domain/store';
@@ -76,8 +76,12 @@ const Passwords: NextPage<{
                 secondary={password.resourceLocation}
               />
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="delete">
-                  <DeleteIcon />
+                <IconButton
+                  title={`Edit ${password.resourceName}`}
+                  edge="end"
+                  aria-label="edit"
+                >
+                  <SettingsIcon />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
