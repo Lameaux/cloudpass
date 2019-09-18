@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import {
@@ -13,13 +13,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import ExpandMore from '@material-ui/icons/ExpandMoreOutlined';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -75,7 +73,10 @@ const useStyles = makeStyles((theme: Theme) =>
       })
     },
     menuButton: {
-      marginRight: 36
+      marginRight: 0,
+      [theme.breakpoints.up('sm')]: {
+        marginRight: 36
+      }
     },
     menuIcon: {
       [theme.breakpoints.up('sm')]: {
@@ -178,6 +179,13 @@ const useStyles = makeStyles((theme: Theme) =>
     footer: {
       marginTop: theme.spacing(4),
       textAlign: 'center'
+    },
+    pageTitle: {
+      marginLeft: theme.spacing(1)
+    },
+    pageTitleBox: {
+      display: 'flex',
+      alignItems: 'center'
     }
   })
 );
@@ -258,20 +266,58 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            CloudPass ***
+            CloudPass***
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
+          <div className={classes.grow} />
+          <div className={classes.pageTitleBox}>
+            {router.route === '/' && (
+              <Fragment>
+                <PasswordIcon fontSize="large" />
+                <Typography
+                  className={classes.pageTitle}
+                  variant="h5"
+                  component="p"
+                >
+                  Passwords
+                </Typography>
+              </Fragment>
+            )}
+            {router.route === '/secret_notes' && (
+              <Fragment>
+                <NoteIcon fontSize="large" />
+                <Typography
+                  className={classes.pageTitle}
+                  variant="h5"
+                  component="p"
+                >
+                  Secret Notes
+                </Typography>
+              </Fragment>
+            )}
+            {router.route === '/folders' && (
+              <Fragment>
+                <FolderIcon fontSize="large" />
+                <Typography
+                  className={classes.pageTitle}
+                  variant="h5"
+                  component="p"
+                >
+                  Folders
+                </Typography>
+              </Fragment>
+            )}
+            {router.route === '/settings' && (
+              <Fragment>
+                <SettingsIcon fontSize="large" />
+                <Typography
+                  className={classes.pageTitle}
+                  variant="h5"
+                  component="p"
+                >
+                  Settings
+                </Typography>
+              </Fragment>
+            )}
           </div>
           <div className={classes.grow} />
           <div>

@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { NextPage } from 'next';
 import fetch from 'isomorphic-unfetch';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
-import FolderSpecialOutlined from '@material-ui/icons/FolderSpecialOutlined';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -49,13 +47,6 @@ const Folders: NextPage<{ folders: FolderRowData[] }> = ({ folders }) => {
 
   return (
     <div>
-      <div className={classes.pageHeader}>
-        <FolderSpecialOutlined fontSize="large" />
-        <Typography className={classes.title} variant="h5" component="p">
-          Folders
-        </Typography>
-      </div>
-
       <Paper className={classes.list}>
         <List>
           {folders.map(folder => (
