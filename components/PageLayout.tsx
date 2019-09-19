@@ -361,7 +361,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
           </IconButton>
         </div>
         <Divider />
-        <List>
+        <List onClick={handleDrawerClose}>
           <Link href="/" color="inherit">
             <ListItem button selected={router.route === '/'}>
               <ListItemIcon className={classes.menuIcon} title="Passwords">
@@ -388,7 +388,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
           </Link>
         </List>
         <Divider />
-        <List>
+        <List onClick={handleDrawerClose}>
           <Link href="/settings" color="inherit">
             <ListItem button selected={router.route === '/settings'}>
               <ListItemIcon className={classes.menuIcon} title="Settings">
@@ -403,7 +403,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
         <div className={classes.toolbar} />
         <main>{children}</main>
         <footer className={classes.footer}>
-          <p>&copy; 2019 Lameaux</p>
+          <p>CloudPass &copy; 2019 Lameaux</p>
           <p>Built with Next.js, Typescript, Material-UI and MongoDB.</p>
         </footer>
       </div>

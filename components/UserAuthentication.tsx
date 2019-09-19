@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme: Theme) =>
     subtitle: {
       padding: theme.spacing(4, 2, 4, 2)
     },
+    cardActions: {
+      padding: theme.spacing(3, 2)
+    },
     demoAccountButton: {
       marginLeft: 'auto'
     },
@@ -124,7 +127,7 @@ const UserAuthentication: FunctionComponent<{}> = ({ children }) => {
               action.
             </Typography>
           </CardContent>
-          <CardActions>
+          <CardActions className={classes.cardActions}>
             <Button
               onClick={() => setOpenLoginDialog(true)}
               size="small"
@@ -152,7 +155,7 @@ const UserAuthentication: FunctionComponent<{}> = ({ children }) => {
           </CardActions>
         </Card>
         <footer className={classes.footer}>
-          <p>&copy; 2019 Lameaux</p>
+          <p>CloudPass &copy; 2019 Lameaux</p>
           <p>Built with Next.js, Typescript, Material-UI and MongoDB.</p>
         </footer>
       </div>

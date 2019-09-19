@@ -8,7 +8,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     list: {
       flexGrow: 1,
-      padding: theme.spacing(2)
+      padding: theme.spacing(2),
+      marginTop: theme.spacing(2)
     }
   })
 );
@@ -19,7 +20,13 @@ const Settings: NextPage<{}> = () => {
   return (
     <div>
       <Paper className={classes.list}>
-        <Typography variant="h6" component="p">
+        <Typography variant="h5" component="p">
+          Change Password
+        </Typography>
+      </Paper>
+
+      <Paper className={classes.list}>
+        <Typography variant="h5" component="p">
           API Access
         </Typography>
       </Paper>
