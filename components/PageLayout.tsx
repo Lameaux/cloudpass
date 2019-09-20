@@ -34,7 +34,7 @@ import Link from './Link';
 import { useRouter } from 'next/router';
 import Chip from '@material-ui/core/Chip';
 import { StoreState } from '../types/StoreState';
-import { logoutUser } from '../domain/store';
+import { logoutUser, openDrawer, closeDrawer } from '../domain/store';
 
 const drawerWidth = 240;
 
@@ -47,6 +47,21 @@ const useUser = () => {
   };
 
   return { logout };
+};
+
+const drawerSelector = (state: StoreState) => state.drawerOpen;
+
+const useDrawer = () => {
+  const dispatch = useDispatch();
+
+  const handleDrawerOpen = () => {
+    dispatch(openDrawer());
+  };
+  const handleDrawerClose = () => {
+    dispatch(closeDrawer());
+  };
+
+  return { handleDrawerOpen, handleDrawerClose };
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -196,19 +211,13 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
   const email = useSelector(userSelector);
   const { logout } = useUser();
 
+  const open = useSelector(drawerSelector);
+  const { handleDrawerOpen, handleDrawerClose } = useDrawer();
+
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const router = useRouter();
-
-  function handleDrawerOpen() {
-    setOpen(true);
-  }
-
-  function handleDrawerClose() {
-    setOpen(false);
-  }
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -361,7 +370,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
           </IconButton>
         </div>
         <Divider />
-        <List onClick={handleDrawerClose}>
+        <List>
           <Link href="/" color="inherit">
             <ListItem button selected={router.route === '/'}>
               <ListItemIcon className={classes.menuIcon} title="Passwords">
@@ -388,7 +397,7 @@ const PageLayout: FunctionComponent<{}> = ({ children }) => {
           </Link>
         </List>
         <Divider />
-        <List onClick={handleDrawerClose}>
+        <List>
           <Link href="/settings" color="inherit">
             <ListItem button selected={router.route === '/settings'}>
               <ListItemIcon className={classes.menuIcon} title="Settings">

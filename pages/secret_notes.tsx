@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { NextPage } from 'next';
 import fetch from 'isomorphic-unfetch';
@@ -21,13 +21,14 @@ import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 
 import { SERVER } from '../config';
-import { loadUserData } from '../domain/store';
+import { loadUserData, closeDrawerAction } from '../domain/store';
 
 import FolderRowData from '../types/FolderRowData';
 import SecretNoteRowData from '../types/SecretNoteRowData';
 import MyNextPageContext from '../types/MyNextPageContext';
 
 import FolderTabs from '../components/FolderTabs';
+import SecretNoteDialog from '../components/SecretNoteDialog';
 import FloatingAddButton from '../components/FloatingAddButton';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -64,23 +65,16 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center'
     },
     inputRoot: {
-      color: 'inherit'
+      color: 'inherit',
+      display: 'flex'
     },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 7),
       transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: 200
-      }
+      width: '100%'
     }
   })
 );
-
-const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  event.preventDefault();
-  console.log('Clicked');
-};
 
 interface PageProps {
   folders: FolderRowData[];
@@ -89,6 +83,17 @@ interface PageProps {
 
 const SecretNotes: NextPage<PageProps> = ({ folders, secretNotes }) => {
   const classes = useStyles({});
+
+  const [openSecretNoteDialog, setOpenSecretNoteDialog] = useState(false);
+
+  const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setOpenSecretNoteDialog(true);
+  };
+
+  const handleSecretNoteDialogClose = () => {
+    setOpenSecretNoteDialog(false);
+  };
 
   return (
     <div>
@@ -137,6 +142,12 @@ const SecretNotes: NextPage<PageProps> = ({ folders, secretNotes }) => {
         title="Add Secret Note"
         onClick={handleAddButtonClick}
       />
+
+      <SecretNoteDialog
+        open={openSecretNoteDialog}
+        handleClose={handleSecretNoteDialogClose}
+        folders={folders}
+      />
     </div>
   );
 };
@@ -145,6 +156,7 @@ SecretNotes.getInitialProps = async function({ store }: MyNextPageContext) {
   const res = await fetch(`${SERVER}/api/user_data`);
   const json = await res.json();
   store.dispatch(loadUserData(json));
+  store.dispatch(closeDrawerAction());
 
   return { folders: [], secretNotes: [] };
 };

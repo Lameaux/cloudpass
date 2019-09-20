@@ -1,8 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { NextPage } from 'next';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+import { closeDrawerAction } from '../domain/store';
+
+import MyNextPageContext from '../types/MyNextPageContext';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,4 +39,9 @@ const Settings: NextPage<{}> = () => {
   );
 };
 
-export default Settings;
+Settings.getInitialProps = async function({ store }: MyNextPageContext) {
+  store.dispatch(closeDrawerAction());
+  return {};
+};
+
+export default connect()(Settings);

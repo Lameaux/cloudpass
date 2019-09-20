@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { NextPage } from 'next';
 import fetch from 'isomorphic-unfetch';
@@ -14,11 +14,12 @@ import IconButton from '@material-ui/core/IconButton';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import { SERVER } from '../config';
-import { loadUserData } from '../domain/store';
+import { loadUserData, closeDrawerAction } from '../domain/store';
 
 import FolderRowData from '../types/FolderRowData';
 import MyNextPageContext from '../types/MyNextPageContext';
 
+import FolderDialog from '../components/FolderDialog';
 import FloatingAddButton from '../components/FloatingAddButton';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,13 +38,19 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  event.preventDefault();
-  console.log('Clicked');
-};
-
 const Folders: NextPage<{ folders: FolderRowData[] }> = ({ folders }) => {
   const classes = useStyles({});
+
+  const [openFolderDialog, setOpenFolderDialog] = useState(false);
+
+  const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setOpenFolderDialog(true);
+  };
+
+  const handleFolderDialogClose = () => {
+    setOpenFolderDialog(false);
+  };
 
   return (
     <div>
@@ -73,6 +80,11 @@ const Folders: NextPage<{ folders: FolderRowData[] }> = ({ folders }) => {
       </Paper>
 
       <FloatingAddButton title="Add Folder" onClick={handleAddButtonClick} />
+
+      <FolderDialog
+        open={openFolderDialog}
+        handleClose={handleFolderDialogClose}
+      />
     </div>
   );
 };
@@ -81,6 +93,7 @@ Folders.getInitialProps = async function({ store }: MyNextPageContext) {
   const res = await fetch(`${SERVER}/api/user_data`);
   const json = await res.json();
   store.dispatch(loadUserData(json));
+  store.dispatch(closeDrawerAction());
 
   return { folders: [] };
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { NextPage } from 'next';
 import fetch from 'isomorphic-unfetch';
@@ -21,13 +21,14 @@ import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 
 import { SERVER } from '../config';
-import { loadUserData } from '../domain/store';
+import { loadUserData, closeDrawerAction } from '../domain/store';
 
 import FolderRowData from '../types/FolderRowData';
 import PasswordRowData from '../types/PasswordRowData';
 import MyNextPageContext from '../types/MyNextPageContext';
 
 import FolderTabs from '../components/FolderTabs';
+import PasswordDialog from '../components/PasswordDialog';
 import FloatingAddButton from '../components/FloatingAddButton';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -64,29 +65,33 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center'
     },
     inputRoot: {
-      color: 'inherit'
+      color: 'inherit',
+      display: 'flex'
     },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 7),
       transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: 200
-      }
+      width: '100%'
     }
   })
 );
-
-const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  event.preventDefault();
-  console.log('Clicked');
-};
 
 const Passwords: NextPage<{
   folders: FolderRowData[];
   passwords: PasswordRowData[];
 }> = ({ folders, passwords }) => {
   const classes = useStyles({});
+
+  const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
+
+  const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setOpenPasswordDialog(true);
+  };
+
+  const handlePasswordDialogClose = () => {
+    setOpenPasswordDialog(false);
+  };
 
   return (
     <div>
@@ -132,6 +137,12 @@ const Passwords: NextPage<{
       </Paper>
 
       <FloatingAddButton title="Add Password" onClick={handleAddButtonClick} />
+
+      <PasswordDialog
+        open={openPasswordDialog}
+        handleClose={handlePasswordDialogClose}
+        folders={folders}
+      />
     </div>
   );
 };
@@ -140,6 +151,7 @@ Passwords.getInitialProps = async function({ store }: MyNextPageContext) {
   const res = await fetch(`${SERVER}/api/user_data`);
   const json = await res.json();
   store.dispatch(loadUserData(json));
+  store.dispatch(closeDrawerAction());
 
   return { folders: [], passwords: [] };
 };
