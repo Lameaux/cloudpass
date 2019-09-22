@@ -67,7 +67,6 @@ const PasswordDialog: FunctionComponent<DialogProps> = ({
           </Select>
         </FormControl>
 
-        <TextField margin="dense" id="url" label="URL" type="text" fullWidth />
         <TextField
           margin="dense"
           id="username"
@@ -82,6 +81,7 @@ const PasswordDialog: FunctionComponent<DialogProps> = ({
           type="password"
           fullWidth
         />
+        <TextField margin="dense" id="url" label="URL" type="text" fullWidth />
         <TextField
           margin="dense"
           id="description"

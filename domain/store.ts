@@ -4,7 +4,7 @@ import thunkMiddleware from 'redux-thunk';
 
 import { StoreState } from '../types/StoreState';
 
-export const DEMO_EMAIL = 'demo@cloudpass.herokuapp.com';
+export const DEMO_EMAIL = 'user@example.com';
 export const DEMO_JWT = 'demo-jwt-token';
 
 const userInitialState: StoreState = {
