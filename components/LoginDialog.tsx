@@ -97,7 +97,6 @@ const LoginDialog: FunctionComponent<DialogProps> = ({
     const user = await res.json();
     login(user.email, user.jwt);
 
-    setForm(initialForm);
     handleClose();
   };
 
